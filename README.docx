@@ -1,34 +1,166 @@
-# Nutricare App
+Nutricare App
+Nutricare is a child malnutrition tracking system designed for primary healthcare workers to monitor children's nutritional status (0-5 years) based on WHO guidelines. It consists of a FastAPI backend for data management, a Telegram bot for quick patient registration and interaction, and an optional React web dashboard for data visualization.
+Features
 
-Nutricare is a **child malnutrition tracking system** designed for primary healthcare workers. It consists of a FastAPI backend, a Telegram bot for quick patient registration, and optional web dashboard (React) integration.
+Child Registration: Register children with name, age, sex, weight, height, and MUAC (Mid-Upper Arm Circumference) via Telegram bot or FastAPI API.
+Nutritional Assessment: Automatically calculate BMI Z-scores (using pygrowup) and classify nutritional status as Severe Acute Malnutrition (SAM), Moderate Acute Malnutrition (MAM), or Normal.
+Data Summarization: View summaries of a child's measurements, including status and WHO-based recommendations.
+CSV Export: Export child records as CSV files through the Telegram bot.
+FastAPI Backend: RESTful API for secure data storage and retrieval, using SQLite for persistence.
+Telegram Bot: User-friendly interface for caregivers to register children, input measurements, and access data.
+Optional Web Dashboard: React-based frontend (not included in this repository) for visualizing child data.
 
----
-
-## **Features**
-
-- Register children with age, weight, height, and MUAC.
-- Automatically calculate BMI, build, and nutrition status (SAM/MAM/Normal).
-- Summarize patient data.
-- Export all patient records as CSV via Telegram.
-- FastAPI backend for data storage and retrieval.
-
----
-
-## **Project Structure**
-
+Project Structure
 Nutricare/
-├─ .gitignore
-├─ README.md
-├─ requirements.txt
-├─ main.py # FastAPI backend
-└─ bot.py # Telegram bot
+├── .gitignore              # Ignores .env, database, and cache files
+├── README.md               # Project documentation
+├── requirements.txt        # Python dependencies
+├── main.py                # FastAPI backend
+├── bot.py                 # Telegram bot
+├── init_db.py             # Initializes SQLite database
+├── models.py              # SQLAlchemy models for database
+└── nutricare.db           # SQLite database (generated, not tracked)
 
----
+Prerequisites
 
-## **Setup Instructions**
+Python: 3.12
+Git: For cloning the repository
+Render Account: For deployment (optional)
+Telegram Account: To interact with the bot
+BotFather: To create and manage the Telegram bot token
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/Nutricare.git
+Setup Instructions
+1. Clone the Repository
+git clone https://github.com/chaisoman/Nutricare.git
 cd Nutricare
+
+2. Install Dependencies
+pip install -r requirements.txt
+
+The requirements.txt includes:
+python-telegram-bot==20.7
+pygrowup==1.0.3
+sqlalchemy==2.0.23
+pandas==2.1.4
+python-dotenv==1.0.1
+fastapi==0.115.0
+uvicorn==0.30.6
+
+3. Set Up Environment Variables
+Create a .env file in the project root with the following:
+TELEGRAM_TOKEN=https://t.me/Nutricare_helper_bot
+WEBHOOK_URL=https://your-render-app.onrender.com
+
+
+TELEGRAM_TOKEN: Obtain from @BotFather on Telegram:
+Send /newbot to @BotFather, follow prompts, and copy the token.
+Security Note: Never commit .env to GitHub. Ensure .gitignore includes .env.
+
+
+WEBHOOK_URL:https://nutricare.onrender.com.
+
+4. Initialize the Database
+Run the following to create the SQLite database (nutricare.db):
+python init_db.py
+
+This sets up the users, children, and measurements tables using SQLAlchemy.
+5. Run Locally
+Telegram Bot
+
+For local testing, enable polling in bot.py by uncommenting app.run_polling(timeout=60) and commenting out the webhook code.
+Run the bot:python bot.py
+
+
+Open Telegram, find your bot (@Nutricarebot), and test commands like /start.
+
+FastAPI Backend
+
+Run the FastAPI server:uvicorn main:app --reload
+
+
+Access the API at http://localhost:8000/docs for Swagger UI.
+
+6. Deploy to Render
+
+Push to GitHub:
+
+Ensure .env is not committed (verify with git status).
+Commit and push changes:git add .
+git commit -m "Update Nutricare app for deployment"
+git push
+
+
+
+
+Create Render Service:
+
+Go to render.com and create a new Web Service.
+Link your GitHub repository and select the branch.
+Configure:
+Runtime: Python 3
+Build Command: pip install -r requirements.txt
+Start Command: python bot.py (for Telegram bot) or uvicorn main:app --host 0.0.0.0 --port $PORT (for FastAPI).
+
+
+Add environment variables in Render Dashboard:
+TELEGRAM_TOKEN:https://t.me/Nutricare_helper_bot.
+WEBHOOK_URL: https://nutricare.onrender.com
+
+Test Deployment:
+
+For the bot, interact via Telegram (@Nutricare, /start).
+For FastAPI, visit https://nutricare.onrender.com/dashboard
+
+7. Usage
+
+Telegram Bot:
+/start: Access the main menu.
+Register caregivers and children.
+Add measurements (weight, height, MUAC).
+Summarize data or export as CSV.
+
+
+FastAPI:
+Endpoints for CRUD operations on users, children, and measurements.
+Example: GET /children to list all children.
+
+
+
+. Troubleshooting
+
+Pylance Errors:
+Ensure 4-space indentation in bot.py.
+Verify app and port are defined in the main() function.
+Check VS Code Problems tab and fix any issues.
+
+
+Bot Not Responding:
+Verify webhook with getWebhookInfo.
+Check Render logs for errors (e.g., missing TELEGRAM_TOKEN).
+Test locally with polling (python bot.py).
+
+
+API Issues:
+Ensure uvicorn is running and endpoints are accessible.
+Check Render logs for FastAPI errors.
+
+
+Database Issues:
+Run init_db.py to create nutricare.db.
+Use a SQLite viewer to verify table data.
+
+
+
+10. Contributing
+Contributions are welcome! Please:
+
+Fork the repository.
+Create a feature branch (git checkout -b feature-name).
+Commit changes (git commit -m "Add feature").
+Push to the branch (git push origin feature-name).
+Open a pull request.
+
+11. License
+This project is licensed under the MIT License.
+12. Contact
+For issues or questions, open a GitHub issue or contact the maintainer torkumagershom630@gmail.com.
