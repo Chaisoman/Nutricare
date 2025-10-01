@@ -166,7 +166,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                 return ConversationHandler.END
             try:
                 action = parts[0]
-                child_id = int(parts[3])  # Fix: Use parts[3] for child_id
+                child_id = int(parts[3])
                 child = session.get(Child, child_id)
                 if not child or child.user.telegram_id != str(user_id):
                     await send_message(update, "⚠️ Child not found or does not belong to you. Please select again." + DISCLAIMER, parse_mode='Markdown')
@@ -472,22 +472,22 @@ def main():
     app.add_handler(conv_handler)
     app.add_handler(CallbackQueryHandler(button_handler))
     app.add_error_handler(error_handler)
-
-    # For  local testing, use polling with increased timeout
-    # app.run_polling(timeout=60) #
     
-     For Render deployment, use webhook (uncomment for deployment)
-     port = int(os.environ.get('PORT', 8443))
-     webhook_url = os.getenv('WEBHOOK_URL')
-     if not webhook_url:
+    # For local testing, use polling with increased timeout
+    # app.run_polling(timeout=60)
+    
+    # For Render deployment, use webhook
+    port = int(os.environ.get('PORT', 8443))
+    webhook_url = os.getenv('WEBHOOK_URL')
+    if not webhook_url:
         logger.error("WEBHOOK_URL not set!")
-         raise ValueError("WEBHOOK_URL environment variable is missing.")
-     app.run_webhook(
-         listen='0.0.0.0',
-         port=port,
-         url_path='/webhook',
-         webhook_url=webhook_url + '/webhook'
-     )
+        raise ValueError("WEBHOOK_URL environment variable is missing.")
+    app.run_webhook(
+        listen='0.0.0.0',
+        port=port,
+        url_path='/webhook',
+        webhook_url=webhook_url + '/webhook'
+    )
 
 if __name__ == '__main__':
     main()
