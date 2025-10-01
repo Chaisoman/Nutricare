@@ -473,9 +473,6 @@ def main():
     app.add_handler(CallbackQueryHandler(button_handler))
     app.add_error_handler(error_handler)
     
-    # For local testing, use polling with increased timeout
-    # app.run_polling(timeout=60)
-    
     # For Render deployment, use webhook
     port = int(os.environ.get('PORT', 8443))
     webhook_url = os.getenv('WEBHOOK_URL')
