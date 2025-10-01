@@ -1,2 +1,0 @@
-TELEGRAM_TOKEN=8237507678:AAG_MRLVrGJCtuaLUebOh8Mb6WWDPZccsvQ
-WEBHOOK_URL=https://nutricare-nvw0.onrender.com
