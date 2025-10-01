@@ -1,13 +1,4 @@
-fastapi
-uvicorn
-python-dotenv
-python-telegram-bot==21.4
-requests
-jinja2
-python-multipart
-psycopg2-binary  # Optional, for PostgreSQL
-sqlalchemy
-sqlmodel==0.0.12
-gunicorn  # Added for Render deployment
-
-
+python-telegram-bot==22.5
+pygrowup==0.8.2
+sqlalchemy==2.0.23
+pandas==2.1.4
